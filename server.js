@@ -1,10 +1,14 @@
 import express from "express";
 import bruxos from "./src/data/bruxos.js";
 
+const serverPort = 3000;
 const app = express();
 
-app.get("/", (req, res) => {
-res.send(`
+app.use(express.json());
+
+// Rota principal - Hogwarts
+app.get('/', (req, res) => {
+  res.send(`
     <div style="
       background: linear-gradient(135deg, #1a237e, #3949ab);
       color: white;
@@ -36,10 +40,77 @@ res.send(`
   `);
 });
 
+// Rota das casas
+app.get('/casas', (req, res) => {
+  res.json({
+    casas: [
+      { nome: "Grifinória", animal: "🦁", fundador: "Godrico Gryffindor" },
+      { nome: "Sonserina", animal: "🐍", fundador: "Salazar Slytherin" },
+      { nome: "Corvinal", animal: "🦅", fundador: "Rowena Ravenclaw" },
+      { nome: "Lufa-lufa", animal: "🦡", fundador: "Helga Hufflepuff" }
+    ]
+  });
+});
+
+// Rota dos bruxos
 app.get("/bruxos", (req, res) => {
     res.json(bruxos);
 });
 
-app.listen(3000, () => {
-    console.log("🧙‍♂️ API dos Bruxos está no ar na porta 3000!");
+// Rota do bruxo por id
+app.get("/bruxos/:id", (req, res) => {
+  let id = req.params.id
+    id = parseInt(id)
+    const bruxo = bruxos.find(b => b.id === id)
+    
+    if(bruxo){
+      res.status(200).json(bruxo)
+    }else{ 
+      res.status(404).json({
+        menssagem: "Bruxo não encontrado"
+    })
+  }
+});
+
+// Rota de bruxo por nome
+app.get("/bruxos/nome/:nome", (req, res) => {
+  let nome = req.params.nome.toLowerCase();
+  
+  const bruxosEncontrados = bruxos.filter(b => 
+      b.nome.toLowerCase().includes(nome)
+  );
+
+  if (bruxosEncontrados.length > 0) {
+   
+      res.status(200).json(bruxosEncontrados);
+  } else {
+      
+      res.status(404).json({
+          mensagem: "Bruxo(s) nao encontrado(s)!"
+      });
+  }
+});
+
+
+// Rota de bruxo por casa
+app.get("/bruxos/casa/:casa", (req, res) => {
+  let casa = req.params.casa;
+  
+  const bruxosDaCasa = bruxos.filter(b => b.casa.toLowerCase() === casa.toLowerCase());
+  if (bruxosDaCasa.length > 0) {
+      
+      res.status(200).json(bruxosDaCasa);
+  } else {
+      
+      res.status(404).json({
+          mensagem: "Nenhum bruxo encontrado nessa casa!"
+      })
+  }
+});
+
+
+// Iniciar servidor
+app.listen(serverPort, () => {
+  console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);
+  console.log(`🏰 Pronto para receber novos bruxos!`);
 });
