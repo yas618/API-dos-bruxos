@@ -1,23 +1,23 @@
 {
-  "name": "server01",
+  "name": "api_dos_bruxos",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js"
   },
   "keywords": [
-    "Senai",
-    "node",
-    "espress"
+    "Harry Potter",
+    "Bruxaria",
+    "Não é magia, é tecnologia"
   ],
-  "author": "Porto",
+  "author": "Yasmin",
   "license": "MIT",
-  "description": "Minha prática com back-end.",
+  "description": "Apresentando bruxos",
   "dependencies": {
-    "espress": "^0.0.0",
     "express": "^5.1.0",
     "nodemon": "^3.1.10"
-  }
+  },
+  "devDependencies": {}
 }
